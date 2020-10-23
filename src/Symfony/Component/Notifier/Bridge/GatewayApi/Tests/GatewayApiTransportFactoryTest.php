@@ -5,45 +5,50 @@ namespace Symfony\Component\Notifier\Bridge\GatewayApi\Tests;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Notifier\Bridge\GatewayApi\GatewayApiTransportFactory;
 use Symfony\Component\Notifier\Exception\IncompleteDsnException;
+use Symfony\Component\Notifier\Exception\MissingRequiredOptionException;
 use Symfony\Component\Notifier\Exception\UnsupportedSchemeException;
 use Symfony\Component\Notifier\Transport\Dsn;
 
+/**
+ * @author Piergiuseppe Longo <piergiuseppe.longo@gmail.com>
+ */
 final class GatewayApiTransportFactoryTest extends TestCase
 {
-    public function testSupportsGatewayApiScheme(): void
+    public function testSupportsGatewayApiScheme()
     {
-        $factory = $this->initFactory();
+        $factory = $this->createFactory();
 
-        $dsn = 'gatewayapi://token@default?from=Symfony';
-
-        $this->assertTrue($factory->supports(Dsn::fromString($dsn)));
+        $this->assertTrue($factory->supports(Dsn::fromString('gatewayapi://token@host.test?from=Symfony')));
     }
 
-    public function testUnSupportedGatewayShouldThrowsUnsupportedSchemeException(): void
+    public function testUnSupportedGatewayShouldThrowsUnsupportedSchemeException()
     {
-        $factory = $this->initFactory();
+        $factory = $this->createFactory();
+
         $this->expectException(UnsupportedSchemeException::class);
-        $dsn = 'wrongGateway://token@default?from=Symfony';
-        $factory->create(Dsn::fromString($dsn));
+
+        $factory->create(Dsn::fromString('somethingElse://token@default?from=Symfony'));
     }
 
-    public function testCreateWithNoTokenThrowsIncompleteDsnException(): void
+    public function testCreateWithNoTokenThrowsIncompleteDsnException()
     {
-        $factory = $this->initFactory();
+        $factory = $this->createFactory();
+
         $this->expectException(IncompleteDsnException::class);
-        $dsn = 'gatewayapi://default?from=Symfony';
-        $factory->create(Dsn::fromString($dsn));
+
+        $factory->create(Dsn::fromString('gatewayapi://host.test?from=Symfony'));
     }
 
-    public function testCreateWithNoFromShouldThrowsIncompleteDsnException(): void
+    public function testCreateWithNoFromShouldThrowsMissingRequiredOptionException()
     {
-        $factory = $this->initFactory();
-        $this->expectException(IncompleteDsnException::class);
-        $dsn = 'gatewayapi://token@default';
-        $factory->create(Dsn::fromString($dsn));
+        $factory = $this->createFactory();
+
+        $this->expectException(MissingRequiredOptionException::class);
+
+        $factory->create(Dsn::fromString('gatewayapi://token@host.test'));
     }
 
-    private function initFactory(): GatewayApiTransportFactory
+    private function createFactory(): GatewayApiTransportFactory
     {
         return new GatewayApiTransportFactory();
     }

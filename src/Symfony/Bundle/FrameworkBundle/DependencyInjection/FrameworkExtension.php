@@ -2237,11 +2237,7 @@ class FrameworkExtension extends Extension
             SendinblueNotifierTransportFactory::class => 'notifier.transport_factory.sendinblue',
             DiscordTransportFactory::class => 'notifier.transport_factory.discord',
             LinkedInTransportFactory::class => 'notifier.transport_factory.linkedin',
-<<<<<<< HEAD
             GatewayApiTransportFactory::class => 'notifier.transport_factory.gatewayapi',
-=======
-            GatewayAPITransportFactory::class => 'notifier.transport_factory.gatewayapi',
->>>>>>> 2575ca2b12 ([Notifier] add support for gatewayapi-notifier)
         ];
 
         foreach ($classToServices as $class => $service) {
