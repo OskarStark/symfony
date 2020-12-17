@@ -13,6 +13,7 @@ namespace Symfony\Component\Notifier\Bridge\Telegram\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\Notifier\Bridge\RocketChat\RocketChatTransport;
 use Symfony\Component\Notifier\Bridge\Telegram\TelegramTransport;
 use Symfony\Component\Notifier\Exception\LogicException;
 use Symfony\Component\Notifier\Exception\TransportException;
@@ -29,6 +30,13 @@ final class TelegramTransportTest extends TestCase
         $transport = $this->createTransport();
 
         $this->assertSame('telegram://host.test?channel=testChannel', (string) $transport);
+    }
+
+    public function testToStringContainsNoChannelBecauseItsOptional()
+    {
+        $transport = $this->createTransport(null);
+
+        $this->assertSame('telegram://host.test', (string) $transport);
     }
 
     public function testSupportsChatMessage()
@@ -134,7 +142,7 @@ final class TelegramTransportTest extends TestCase
         $transport->send(new ChatMessage('testMessage', $messageOptions));
     }
 
-    private function createTransport($channel = 'testChannel', ?HttpClientInterface $client = null): TelegramTransport
+    private function createTransport(?string $channel = 'testChannel', ?HttpClientInterface $client = null): TelegramTransport
     {
         return (new TelegramTransport('token', $channel, $client ?: $this->createMock(HttpClientInterface::class)))->setHost('host.test');
     }
