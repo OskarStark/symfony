@@ -32,7 +32,7 @@ final class SlackTransportFactoryTest extends TransportFactoryTestCase
 
     public function createProvider(): iterable
     {
-        yield => [
+        yield [
             'slack://host.test',
             'slack://testUser@host.test',
         ];

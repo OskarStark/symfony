@@ -14,6 +14,7 @@ namespace Symfony\Component\Notifier\Bridge\Esendex\Tests;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Notifier\Bridge\Esendex\EsendexTransport;
 use Symfony\Component\Notifier\Exception\TransportException;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Notifier\Message\MessageInterface;
 use Symfony\Component\Notifier\Message\SmsMessage;
 use Symfony\Component\Notifier\Tests\TransportTestCase;
