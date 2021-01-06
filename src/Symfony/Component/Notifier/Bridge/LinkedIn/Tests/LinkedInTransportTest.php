@@ -2,7 +2,6 @@
 
 namespace Symfony\Component\Notifier\Bridge\LinkedIn\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Notifier\Bridge\LinkedIn\LinkedInTransport;
 use Symfony\Component\Notifier\Exception\LogicException;

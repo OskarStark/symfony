@@ -11,13 +11,8 @@
 
 namespace Symfony\Component\Notifier\Bridge\Mobyt\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Notifier\Bridge\Mobyt\MobytTransportFactory;
-use Symfony\Component\Notifier\Exception\IncompleteDsnException;
-use Symfony\Component\Notifier\Exception\InvalidArgumentException;
-use Symfony\Component\Notifier\Exception\UnsupportedSchemeException;
 use Symfony\Component\Notifier\Tests\TransportFactoryTestCase;
-use Symfony\Component\Notifier\Transport\Dsn;
 use Symfony\Component\Notifier\Transport\TransportFactoryInterface;
 
 /**
@@ -42,7 +37,7 @@ final class MobytTransportFactoryTest extends TransportFactoryTestCase
 
         yield [
             'mobyt://host.test?from=FROM&type_quality=N',
-            'mobyt://accountSid:authToken@host.test?from=FROM&type_quality=N'
+            'mobyt://accountSid:authToken@host.test?from=FROM&type_quality=N',
         ];
     }
 

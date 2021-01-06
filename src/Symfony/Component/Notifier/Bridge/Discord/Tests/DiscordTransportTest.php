@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Notifier\Bridge\Discord\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Notifier\Bridge\Discord\DiscordTransport;
 use Symfony\Component\Notifier\Exception\LogicException;

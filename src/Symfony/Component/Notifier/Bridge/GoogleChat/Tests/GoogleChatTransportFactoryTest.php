@@ -11,12 +11,8 @@
 
 namespace Symfony\Component\Notifier\Bridge\GoogleChat\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Notifier\Bridge\GoogleChat\GoogleChatTransportFactory;
-use Symfony\Component\Notifier\Exception\IncompleteDsnException;
-use Symfony\Component\Notifier\Exception\UnsupportedSchemeException;
 use Symfony\Component\Notifier\Tests\TransportFactoryTestCase;
-use Symfony\Component\Notifier\Transport\Dsn;
 use Symfony\Component\Notifier\Transport\TransportFactoryInterface;
 
 final class GoogleChatTransportFactoryTest extends TransportFactoryTestCase
@@ -38,7 +34,7 @@ final class GoogleChatTransportFactoryTest extends TransportFactoryTestCase
 
         yield [
             'googlechat://chat.googleapis.com/AAAAA_YYYYY?threadKey=abcdefg',
-            'googlechat://abcde-fghij:kl_mnopqrstwxyz%3D@chat.googleapis.com/AAAAA_YYYYY?threadKey=abcdefg'
+            'googlechat://abcde-fghij:kl_mnopqrstwxyz%3D@chat.googleapis.com/AAAAA_YYYYY?threadKey=abcdefg',
         ];
     }
 

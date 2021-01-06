@@ -11,10 +11,8 @@
 
 namespace Symfony\Component\Notifier\Bridge\Mobyt\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Notifier\Bridge\Mobyt\MobytOptions;
 use Symfony\Component\Notifier\Bridge\Mobyt\MobytTransport;
-use Symfony\Component\Notifier\Exception\LogicException;
 use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Notifier\Message\MessageInterface;
 use Symfony\Component\Notifier\Message\SmsMessage;

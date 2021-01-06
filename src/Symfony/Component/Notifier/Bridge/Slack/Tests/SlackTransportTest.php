@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Notifier\Bridge\Slack\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
 use Symfony\Component\Notifier\Bridge\Slack\SlackTransport;
@@ -41,7 +40,6 @@ final class SlackTransportTest extends TransportTestCase
     {
         yield ['slack://slack.com', $this->createTransport()];
         yield ['slack://slack.com?channel=test+Channel', $this->createTransport(null, 'test Channel')];
-
     }
 
     public function supportedMessagesProvider(): iterable
