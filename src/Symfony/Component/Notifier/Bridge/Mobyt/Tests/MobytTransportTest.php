@@ -36,7 +36,7 @@ final class MobytTransportTest extends TransportTestCase
     public function toStringProvider(): iterable
     {
         yield ['mobyt://host.test?from=from&type_quality=LL', $this->createTransport()];
-        yield ['mobyt://host.test?from=from&type_quality=LL', $this->createTransport(null, MobytOptions::MESSAGE_TYPE_QUALITY_HIGH)];
+        yield ['mobyt://host.test?from=from&type_quality=N', $this->createTransport(null, MobytOptions::MESSAGE_TYPE_QUALITY_HIGH)];
     }
 
     public function supportedMessagesProvider(): iterable
