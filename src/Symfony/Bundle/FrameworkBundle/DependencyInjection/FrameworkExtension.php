@@ -105,6 +105,7 @@ use Symfony\Component\Notifier\Bridge\Discord\DiscordTransportFactory;
 use Symfony\Component\Notifier\Bridge\Esendex\EsendexTransportFactory;
 use Symfony\Component\Notifier\Bridge\Firebase\FirebaseTransportFactory;
 use Symfony\Component\Notifier\Bridge\FreeMobile\FreeMobileTransportFactory;
+use Symfony\Component\Notifier\Bridge\GatewayApi\GatewayApiTransportFactory;
 use Symfony\Component\Notifier\Bridge\GoogleChat\GoogleChatTransportFactory;
 use Symfony\Component\Notifier\Bridge\Infobip\InfobipTransportFactory;
 use Symfony\Component\Notifier\Bridge\Iqsms\IqsmsTransportFactory;
@@ -2236,6 +2237,11 @@ class FrameworkExtension extends Extension
             SendinblueNotifierTransportFactory::class => 'notifier.transport_factory.sendinblue',
             DiscordTransportFactory::class => 'notifier.transport_factory.discord',
             LinkedInTransportFactory::class => 'notifier.transport_factory.linkedin',
+<<<<<<< HEAD
+            GatewayApiTransportFactory::class => 'notifier.transport_factory.gatewayapi',
+=======
+            GatewayAPITransportFactory::class => 'notifier.transport_factory.gatewayapi',
+>>>>>>> 2575ca2b12 ([Notifier] add support for gatewayapi-notifier)
         ];
 
         foreach ($classToServices as $class => $service) {
