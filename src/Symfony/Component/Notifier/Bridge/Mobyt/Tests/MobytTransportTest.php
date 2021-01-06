@@ -15,48 +15,40 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Notifier\Bridge\Mobyt\MobytOptions;
 use Symfony\Component\Notifier\Bridge\Mobyt\MobytTransport;
 use Symfony\Component\Notifier\Exception\LogicException;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Notifier\Message\MessageInterface;
 use Symfony\Component\Notifier\Message\SmsMessage;
+use Symfony\Component\Notifier\Tests\TransportTestCase;
+use Symfony\Component\Notifier\Transport\TransportInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-final class MobytTransportTest extends TestCase
+final class MobytTransportTest extends TransportTestCase
 {
-    public function testToStringContainsProperties()
+    /**
+     * @return MobytTransport
+     */
+    public function createTransport(?HttpClientInterface $client = null, string $messageType = null): TransportInterface
     {
-        $transport = $this->createTransport();
-
-        $this->assertSame('mobyt://host.test?from=from&message_type=LL', (string) $transport);
+        return (new MobytTransport('accountSid', 'authToken', 'from', $messageType, $client ?: $this->createMock(HttpClientInterface::class)))->setHost('host.test');
     }
 
-    public function testToStringContainsDifferentMessageTypeIfSet()
+    public function toStringProvider(): iterable
     {
-        $transport = $this->createTransport(MobytOptions::MESSAGE_TYPE_QUALITY_HIGH);
-
-        $this->assertSame('mobyt://host.test?from=from&message_type=N', (string) $transport);
+        yield ['mobyt://host.test?from=from&type_quality=LL', $this->createTransport()];
+        yield ['mobyt://host.test?from=from&type_quality=LL', $this->createTransport(null, MobytOptions::MESSAGE_TYPE_QUALITY_HIGH)];
     }
 
-    public function testSupportsMessageInterface()
+    public function supportedMessagesProvider(): iterable
     {
-        $transport = $this->createTransport();
-
-        $this->assertTrue($transport->supports(new SmsMessage('0611223344', 'Hello!')));
-        $this->assertFalse($transport->supports($this->createMock(MessageInterface::class)));
+        yield [new SmsMessage('0611223344', 'Hello!')];
     }
 
-    public function testSendNonSmsMessageThrowsLogicException()
+    public function unsupportedMessagesProvider(): iterable
     {
-        $transport = $this->createTransport();
-
-        $this->expectException(LogicException::class);
-
-        $transport->send($this->createMock(MessageInterface::class));
-    }
-
-    private function createTransport(?string $messageType = null): MobytTransport
-    {
-        return (new MobytTransport('accountSid', 'authToken', 'from', $messageType, $this->createMock(HttpClientInterface::class)))->setHost('host.test');
+        yield [new ChatMessage('Hello!')];
+        yield [$this->createMock(MessageInterface::class)];
     }
 }
