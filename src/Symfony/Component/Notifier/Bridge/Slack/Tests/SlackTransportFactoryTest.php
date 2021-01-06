@@ -11,11 +11,8 @@
 
 namespace Symfony\Component\Notifier\Bridge\Slack\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Notifier\Bridge\Slack\SlackTransportFactory;
-use Symfony\Component\Notifier\Exception\IncompleteDsnException;
 use Symfony\Component\Notifier\Exception\InvalidArgumentException;
-use Symfony\Component\Notifier\Exception\UnsupportedSchemeException;
 use Symfony\Component\Notifier\Tests\TransportFactoryTestCase;
 use Symfony\Component\Notifier\Transport\Dsn;
 use Symfony\Component\Notifier\Transport\TransportFactoryInterface;
@@ -44,7 +41,7 @@ final class SlackTransportFactoryTest extends TransportFactoryTestCase
 
         yield 'without path' => [
             'slack://host.test?channel=testChannel',
-            'slack://testUser@host.test?channel=testChannel'
+            'slack://testUser@host.test?channel=testChannel',
         ];
     }
 
