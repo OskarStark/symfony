@@ -12,7 +12,7 @@
 namespace Symfony\Component\Security\Http\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -24,13 +24,13 @@ class FirewallTest extends TestCase
 {
     public function testOnKernelRequestRegistersExceptionListener()
     {
-        $dispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $subscriber = $this->getMockBuilder(EventSubscriberInterface::class)->getMock();
 
         $listener = $this->getMockBuilder(ExceptionListener::class)->disableOriginalConstructor()->getMock();
         $listener
             ->expects($this->once())
             ->method('register')
-            ->with($this->equalTo($dispatcher))
+            ->with($this->equalTo($subscriber))
         ;
 
         $request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->disableOriginalClone()->getMock();
@@ -45,7 +45,7 @@ class FirewallTest extends TestCase
 
         $event = new RequestEvent($this->getMockBuilder(HttpKernelInterface::class)->getMock(), $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $firewall = new Firewall($map, $dispatcher);
+        $firewall = new Firewall($map, $subscriber);
         $firewall->onKernelRequest($event);
     }
 
@@ -83,7 +83,7 @@ class FirewallTest extends TestCase
             ->willReturn(true)
         ;
 
-        $firewall = new Firewall($map, $this->getMockBuilder(EventDispatcherInterface::class)->getMock());
+        $firewall = new Firewall($map, $this->getMockBuilder(EventSubscriberInterface::class)->getMock());
         $firewall->onKernelRequest($event);
 
         $this->assertSame([1], $called);
@@ -103,7 +103,7 @@ class FirewallTest extends TestCase
             HttpKernelInterface::SUB_REQUEST
         );
 
-        $firewall = new Firewall($map, $this->getMockBuilder(EventDispatcherInterface::class)->getMock());
+        $firewall = new Firewall($map, $this->getMockBuilder(EventSubscriberInterface::class)->getMock());
         $firewall->onKernelRequest($event);
 
         $this->assertFalse($event->hasResponse());
@@ -115,13 +115,13 @@ class FirewallTest extends TestCase
      */
     public function testMissingLogoutListener()
     {
-        $dispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $subscriber = $this->getMockBuilder(EventSubscriberInterface::class)->getMock();
 
         $listener = $this->getMockBuilder(ExceptionListener::class)->disableOriginalConstructor()->getMock();
         $listener
             ->expects($this->once())
             ->method('register')
-            ->with($this->equalTo($dispatcher))
+            ->with($this->equalTo($subscriber))
         ;
 
         $request = new Request();
@@ -134,7 +134,7 @@ class FirewallTest extends TestCase
             ->willReturn([[], $listener])
         ;
 
-        $firewall = new Firewall($map, $dispatcher);
+        $firewall = new Firewall($map, $subscriber);
         $firewall->onKernelRequest(new RequestEvent($this->getMockBuilder(HttpKernelInterface::class)->getMock(), $request, HttpKernelInterface::MASTER_REQUEST));
     }
 }
