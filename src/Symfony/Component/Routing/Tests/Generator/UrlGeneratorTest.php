@@ -128,6 +128,46 @@ class UrlGeneratorTest extends TestCase
         $this->assertEquals('http://localhost/app.php/testing', $url);
     }
 
+    public function testRelativeUrlWithStringableObjectParameter()
+    {
+        $stringableObject = new StringableObject();
+
+        $routes = $this->getRoutes('test', new Route('/testing/{foo}'));
+        $url = $this->getGenerator($routes)->generate('test', ['foo' => $stringableObject], UrlGeneratorInterface::ABSOLUTE_PATH);
+
+        $this->assertSame('/app.php/testing/bar', $url);
+    }
+
+    public function testRelativeUrlWithStringableObjectExtraParameter()
+    {
+        $stringableObject = new StringableObject();
+
+        $routes = $this->getRoutes('test', new Route('/testing'));
+        $url = $this->getGenerator($routes)->generate('test', ['stringable' => $stringableObject], UrlGeneratorInterface::ABSOLUTE_PATH);
+
+        $this->assertSame('/app.php/testing?stringable=bar', $url);
+    }
+
+    public function testAbsoluteUrlWithStringableObjectExtraParameter()
+    {
+        $stringableObject = new StringableObject();
+
+        $routes = $this->getRoutes('test', new Route('/testing'));
+        $url = $this->getGenerator($routes)->generate('test', ['stringable' => $stringableObject], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $this->assertSame('http://localhost/app.php/testing?stringable=bar', $url);
+    }
+
+    public function testAbsoluteUrlWithStringableObjectExtraParameterInArray()
+    {
+        $stringableObject = new StringableObject();
+
+        $routes = $this->getRoutes('test', new Route('/testing'));
+        $url = $this->getGenerator($routes)->generate('test', ['key' => ['stringable' => $stringableObject]], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $this->assertSame('http://localhost/app.php/testing?key%5Bstringable%5D=bar', $url);
+    }
+
     public function testUrlWithExtraParametersFromGlobals()
     {
         $routes = $this->getRoutes('test', new Route('/testing'));
@@ -469,6 +509,12 @@ class UrlGeneratorTest extends TestCase
         $this->assertSame('/app.php/dir/%2E/dir/%2E', $this->getGenerator($routes)->generate('test'));
         $routes = $this->getRoutes('test', new Route('/a./.a/a../..a/...'));
         $this->assertSame('/app.php/a./.a/a../..a/...', $this->getGenerator($routes)->generate('test'));
+    }
+
+    public function testEncodingOfSlashInPath()
+    {
+        $routes = $this->getRoutes('test', new Route('/dir/{path}/dir2', [], ['path' => '.+']));
+        $this->assertSame('/app.php/dir/foo/bar%2Fbaz/dir2', $this->getGenerator($routes)->generate('test', ['path' => 'foo/bar%2Fbaz']));
     }
 
     public function testAdjacentVariables()
@@ -890,5 +936,13 @@ class UrlGeneratorTest extends TestCase
         $routes->add($name, $route);
 
         return $routes;
+    }
+}
+
+class StringableObject
+{
+    public function __toString()
+    {
+        return 'bar';
     }
 }
