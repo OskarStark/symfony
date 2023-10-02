@@ -55,7 +55,10 @@ class Cookie
             'samesite' => null,
         ];
 
-        $parts = HeaderUtils::split($cookie, ';=');
+        $parts = array_map(function ($part) {
+            return explode('=', $part, 2);
+        }, HeaderUtils::split($cookie, ';'));
+
         $part = array_shift($parts);
 
         $name = $decode ? urldecode($part[0]) : $part[0];
