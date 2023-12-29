@@ -20,10 +20,11 @@ class SentMessage
     private string $transport;
     private ?string $messageId = null;
 
-    public function __construct(MessageInterface $original, string $transport)
+    public function __construct(MessageInterface $original, string $transport, string $messageId = null)
     {
         $this->original = $original;
         $this->transport = $transport;
+        $this->messageId = $messageId;
     }
 
     public function getOriginalMessage(): MessageInterface
