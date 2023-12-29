@@ -19,6 +19,7 @@ class SentMessage
     private MessageInterface $original;
     private string $transport;
     private ?string $messageId = null;
+    private array $info = [];
 
     public function __construct(MessageInterface $original, string $transport)
     {
@@ -44,5 +45,24 @@ class SentMessage
     public function getMessageId(): ?string
     {
         return $this->messageId;
+    }
+
+    public function setInfo(int $responseStatusCode, array $responseHeaders = [], array $body = []): void
+    {
+        $this->info = [
+            'response' => [
+                'status_code' => $responseStatusCode,
+                'headers' => $responseHeaders,
+                'body' => $body,
+            ]
+        ];
+    }
+
+    /**
+     * @return array{response: array{status_code: int, headers: array, body: array}
+     */
+    public function getInfo(): array
+    {
+        return $this->info;
     }
 }
