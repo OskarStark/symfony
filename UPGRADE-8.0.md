@@ -371,7 +371,7 @@ Serializer
  * Remove `AbstractNormalizerContextBuilder::withDefaultContructorArguments()`, use `withDefaultConstructorArguments()` instead
  * Change signature of `NameConverterInterface::normalize()` and `NameConverterInterface::denormalize()` methods:
 
-   *Before*
+   Before:
 
    ```php
    public function normalize(string $propertyName): string;
