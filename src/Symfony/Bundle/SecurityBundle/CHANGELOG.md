@@ -4,6 +4,9 @@ CHANGELOG
 8.0
 ---
 
+ * [BC BREAK] Remove the deprecated `hide_user_not_found` configuration option, use `expose_security_errors` instead
+ * [BC BREAK] Remove the deprecated `algorithm` and `key` options from the OIDC token handler configuration, use `algorithms` and `keyset` instead
+ * [BC BREAK] Remove deprecated rate limiter factory autowiring aliases
  * Remove `LazyFirewallContext::__invoke()`
 
 7.4
