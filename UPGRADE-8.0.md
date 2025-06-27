@@ -152,6 +152,72 @@ FrameworkBundle
    $application->addCommand(new CreateUserCommand());
    ```
 
+ * Remove deprecated rate limiter factory autowiring aliases
+
+   *Before*
+   ```php
+   public function __construct(
+       #[Autowire(service: 'limiter.my_rate_limiter')]
+       private RateLimiterFactory $rateLimiter,
+   ) {}
+   ```
+
+   *After*
+   ```php
+   use Symfony\Component\DependencyInjection\Attribute\Target;
+   
+   public function __construct(
+       #[Target('my_rate_limiter.limiter')]
+       private RateLimiterFactoryInterface $rateLimiter,
+   ) {}
+   ```
+
+Form
+----
+
+ * Change default value of `default_protocol` option in `UrlType` from `'http'` to `null`
+
+   *Before*
+   ```php
+   $builder->add('website', UrlType::class, [
+       // default_protocol was 'http' if not specified
+   ]);
+   ```
+
+   *After*
+   ```php
+   $builder->add('website', UrlType::class, [
+       // default_protocol is now null if not specified
+       // To keep the old behavior:
+       'default_protocol' => 'http',
+   ]);
+   ```
+
+HttpFoundation
+--------------
+
+ * Remove the following deprecated session options from `NativeSessionStorage`: `referer_check`, `use_only_cookies`, `use_trans_sid`, `sid_length`, `sid_bits_per_character`, `trans_sid_hosts`, `trans_sid_tags`
+
+   *Before*
+   ```php
+   $storage = new NativeSessionStorage([
+       'referer_check' => 'example.com',
+       'use_only_cookies' => 1,
+       'use_trans_sid' => 0,
+       'sid_length' => 32,
+       'sid_bits_per_character' => 5,
+       'trans_sid_hosts' => 'example.com',
+       'trans_sid_tags' => 'a=href',
+   ]);
+   ```
+
+   *After*
+   ```php
+   $storage = new NativeSessionStorage([
+       // These options are no longer supported
+   ]);
+   ```
+
 HttpClient
 ----------
 
@@ -330,8 +396,105 @@ Security
  * Remove `AbstractListener::__invoke`
  * Remove `LazyFirewallContext::__invoke()`
 
+SecurityBundle
+--------------
+
+ * Remove the deprecated `hide_user_not_found` configuration option, use `expose_security_errors` instead
+
+   *Before*
+   ```yaml
+   security:
+       hide_user_not_found: true
+   ```
+
+   *After*
+   ```yaml
+   security:
+       expose_security_errors: none  # equivalent to hide_user_not_found: true
+       # or
+       expose_security_errors: all   # equivalent to hide_user_not_found: false
+   ```
+
+ * Remove the deprecated `algorithm` and `key` options from the OIDC token handler configuration, use `algorithms` and `keyset` instead
+
+   *Before*
+   ```yaml
+   security:
+       firewalls:
+           api:
+               access_token:
+                   token_handler:
+                       oidc:
+                           algorithm: 'RS256'
+                           key: '{"kty":"RSA","n":"..."}'
+   ```
+
+   *After*
+   ```yaml
+   security:
+       firewalls:
+           api:
+               access_token:
+                   token_handler:
+                       oidc:
+                           algorithms: ['RS256']
+                           keyset: '{"keys":[{"kty":"RSA","n":"..."}]}'
+   ```
+
+ * Remove deprecated rate limiter factory autowiring aliases
+
+   *Before*
+   ```php
+   public function __construct(
+       #[Autowire(service: 'limiter.login_local_main')]
+       private RateLimiterFactory $localLimiter,
+   ) {}
+   ```
+
+   *After*
+   ```php
+   use Symfony\Component\DependencyInjection\Attribute\Target;
+   
+   public function __construct(
+       #[Target('login_local_main.limiter')]
+       private RateLimiterFactoryInterface $localLimiter,
+   ) {}
+   ```
+
 Serializer
 ----------
+
+ * Remove `CsvEncoder::ESCAPE_CHAR_KEY` constant and escape character functionality
+
+   *Before*
+   ```php
+   $context = [
+       CsvEncoder::ESCAPE_CHAR_KEY => '\\',
+   ];
+   $encoder->encode($data, 'csv', $context);
+   ```
+
+   *After*
+   ```php
+   // The escape character is no longer configurable
+   $encoder->encode($data, 'csv');
+   ```
+
+ * Remove `CsvEncoderContextBuilder::withEscapeChar()` method
+
+   *Before*
+   ```php
+   $context = (new CsvEncoderContextBuilder())
+       ->withEscapeChar('\\')
+       ->toArray();
+   ```
+
+   *After*
+   ```php
+   // The escape character is no longer configurable
+   $context = (new CsvEncoderContextBuilder())
+       ->toArray();
+   ```
 
  * Remove `AbstractNormalizerContextBuilder::withDefaultContructorArguments()`, use `withDefaultConstructorArguments()` instead
  * Change signature of `NameConverterInterface::normalize()` and `NameConverterInterface::denormalize()` methods:
@@ -357,12 +520,34 @@ TwigBridge
 
  * Remove `text` format from the `debug:twig` command, use the `txt` format instead
 
+Translation
+-----------
+
+ * Remove the `$escape` parameter from `CsvFileLoader::setCsvControl()`
+
+   *Before*
+   ```php
+   $loader = new CsvFileLoader();
+   $loader->setCsvControl(';', '"', '\\');
+   ```
+
+   *After*
+   ```php
+   $loader = new CsvFileLoader();
+   $loader->setCsvControl(';', '"'); // escape parameter removed
+   ```
+
 VarExporter
 -----------
 
  * Restrict `ProxyHelper::generateLazyProxy()` to generating abstraction-based lazy decorators; use native lazy proxies otherwise
  * Remove `LazyGhostTrait` and `LazyProxyTrait`, use native lazy objects instead
  * Remove `ProxyHelper::generateLazyGhost()`, use native lazy objects instead
+
+Validator
+---------
+
+ * Remove `Bic::INVALID_BANK_CODE_ERROR` constant
 
 Yaml
 ----
