@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+8.0
+---
+
+ * [BC BREAK] Remove `Bic::INVALID_BANK_CODE_ERROR` constant
+
 7.3
 ---
 
