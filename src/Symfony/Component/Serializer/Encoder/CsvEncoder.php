@@ -92,7 +92,7 @@ class CsvEncoder implements EncoderInterface, DecoderInterface
         $endOfLine = $context[self::END_OF_LINE] ?? $this->defaultContext[self::END_OF_LINE];
 
         if (!($context[self::NO_HEADERS_KEY] ?? $this->defaultContext[self::NO_HEADERS_KEY])) {
-            fputcsv($handle, $headers, $delimiter, $enclosure);
+            fputcsv($handle, $headers, $delimiter, $enclosure, '');
             if ("\n" !== $endOfLine && 0 === fseek($handle, -1, \SEEK_CUR)) {
                 fwrite($handle, $endOfLine);
             }
@@ -100,7 +100,7 @@ class CsvEncoder implements EncoderInterface, DecoderInterface
 
         $headers = array_fill_keys($headers, '');
         foreach ($data as $row) {
-            fputcsv($handle, array_replace($headers, $row), $delimiter, $enclosure);
+            fputcsv($handle, array_replace($headers, $row), $delimiter, $enclosure, '');
             if ("\n" !== $endOfLine && 0 === fseek($handle, -1, \SEEK_CUR)) {
                 fwrite($handle, $endOfLine);
             }
@@ -143,7 +143,7 @@ class CsvEncoder implements EncoderInterface, DecoderInterface
 
         [$delimiter, $enclosure, $keySeparator, , , , $asCollection] = $this->getCsvOptions($context);
 
-        while (false !== ($cols = fgetcsv($handle, 0, $delimiter, $enclosure))) {
+        while (false !== ($cols = fgetcsv($handle, 0, $delimiter, $enclosure, ''))) {
             $nbCols = \count($cols);
 
             if (null === $headers) {

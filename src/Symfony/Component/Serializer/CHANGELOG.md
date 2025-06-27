@@ -6,7 +6,6 @@ CHANGELOG
 
  * Remove `CsvEncoder::ESCAPE_CHAR_KEY` constant and escape character functionality
  * Remove `CsvEncoderContextBuilder::withEscapeChar()` method
- * Remove `symfony/deprecation-contracts` dependency
  * Remove `AbstractNormalizerContextBuilder::withDefaultContructorArguments()`, use `withDefaultConstructorArguments()` instead
  * Change signature of `NameConverterInterface::normalize()` and `NameConverterInterface::denormalize()` methods:
 
