@@ -335,36 +335,21 @@ Serializer
 
  * Remove escape character functionality from `CsvEncoder`
 
-   *Before*
-   ```php
+   ```diff
    use Symfony\Component\Serializer\Encoder\CsvEncoder;
 
    // Using escape character in encoding
    $encoder = new CsvEncoder();
-   $csv = $encoder->encode($data, 'csv', [
-       CsvEncoder::ESCAPE_CHAR_KEY => '\\',
-   ]);
+   -$csv = $encoder->encode($data, 'csv', [
+   -    CsvEncoder::ESCAPE_CHAR_KEY => '\\',
+   -]);
+   +$csv = $encoder->encode($data, 'csv');
 
    // Using escape character with context builder
    use Symfony\Component\Serializer\Context\Encoder\CsvEncoderContextBuilder;
    
    $context = (new CsvEncoderContextBuilder())
-       ->withEscapeChar('\\')
-       ->toArray();
-   ```
-
-   *After*
-   ```php
-   use Symfony\Component\Serializer\Encoder\CsvEncoder;
-
-   // The escape character functionality has been removed
-   $encoder = new CsvEncoder();
-   $csv = $encoder->encode($data, 'csv');
-   
-   // The withEscapeChar() method no longer exists
-   use Symfony\Component\Serializer\Context\Encoder\CsvEncoderContextBuilder;
-   
-   $context = (new CsvEncoderContextBuilder())
+   -    ->withEscapeChar('\\')
        ->toArray();
    ```
 
